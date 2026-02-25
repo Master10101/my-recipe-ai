@@ -1,20 +1,29 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import Groq from "groq-sdk";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// This connects to Groq instead of OpenAI
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 export async function POST(req: Request) {
-  const { ingredients, dishType } = await req.json();
+  try {
+    const { ingredients, dishType } = await req.json();
 
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      { role: "system", content: "You are a helpful chef." },
-      { role: "user", content: `I have ${ingredients}. Make me a ${dishType}.` },
-    ],
-  });
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: "You are a helpful chef. Create a recipe based on ingredients. Use Markdown formatting."
+        },
+        {
+          role: "user",
+          content: `I have: ${ingredients}. I want to make: ${dishType}.`
+        }
+      ],
+      model: "llama-3.3-70b-versatile", // This is a powerful FREE model
+    });
 
-  return NextResponse.json({ recipe: completion.choices[0].message.content });
+    return NextResponse.json({ recipe: chatCompletion.choices[0]?.message?.content });
+  } catch (error) {
+    return NextResponse.json({ error: "API Error" }, { status: 500 });
+  }
 }
