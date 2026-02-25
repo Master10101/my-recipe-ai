@@ -26,33 +26,54 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-slate-900 via-slate-800 to-black text-white py-12 px-4">
-      <div className="max-w-3xl mx-auto">
-        {/* Header Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-extrabold tracking-tight mb-2 bg-clip-text text-transparent bg-gradient-to-r from-amber-200 to-yellow-500">
-            CHEF LUXE
-          </h1>
-          <p className="text-slate-400 uppercase tracking-[0.3em] text-sm font-light">Artificial Intelligence Gastronomy</p>
+    <main className="relative min-h-screen w-full overflow-x-hidden">
+      {/* --- VIDEO BACKGROUND --- */}
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="h-full w-full object-cover opacity-60"
+        >
+          <source src="https://www.pexels.com/download/video/2894881/" type="video/mp4" />
+        </video>
+        {/* Dark overlay to make text readable */}
+        <div className="absolute inset-0 bg-black/60 shadow-[inset_0_0_100px_rgba(0,0,0,0.8)]"></div>
+      </div>
+
+      <div className="relative z-10 max-w-3xl mx-auto py-12 px-6">
+        {/* Founder Credit */}
+        <div className="absolute top-0 right-6 text-right">
+          <p className="text-[10px] tracking-[0.4em] text-amber-500 uppercase font-bold">Founder</p>
+          <p className="text-xl font-serif text-white italic">Isum</p>
         </div>
 
-        {/* Input Card */}
-        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl mb-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div className="space-y-2">
-              <label className="text-xs font-semibold text-amber-500 uppercase ml-1">Pantry Items</label>
+        {/* Header Section */}
+        <div className="text-center mb-16 mt-8">
+          <h1 className="text-6xl font-black tracking-tighter mb-2 text-white italic">
+            CHEF<span className="text-amber-500">.</span>AI
+          </h1>
+          <p className="text-amber-200/70 uppercase tracking-[0.5em] text-[10px] font-medium">Bespoke Culinary Intelligence</p>
+        </div>
+
+        {/* Glassmorphism Input Card */}
+        <div className="bg-black/40 backdrop-blur-md border border-white/20 rounded-[2rem] p-8 shadow-2xl mb-12">
+          <div className="space-y-6 mb-8">
+            <div>
+              <label className="text-[10px] font-bold text-amber-500 uppercase tracking-widest ml-1">Your Ingredients</label>
               <input 
-                className="w-full bg-slate-900/50 border border-white/10 rounded-2xl p-4 text-white placeholder:text-slate-600 focus:border-amber-500/50 outline-none transition-all"
+                className="w-full bg-white/5 border-b border-white/30 p-4 text-white placeholder:text-gray-500 outline-none focus:border-amber-500 transition-all text-lg"
                 onChange={(e) => setIngreds(e.target.value)} 
-                placeholder="Ex: Wagyu, Truffle, Garlic..." 
+                placeholder="What is in your pantry?" 
               />
             </div>
-            <div className="space-y-2">
-              <label className="text-xs font-semibold text-amber-500 uppercase ml-1">Desired Creation</label>
+            <div>
+              <label className="text-[10px] font-bold text-amber-500 uppercase tracking-widest ml-1">Desired Dish</label>
               <input 
-                className="w-full bg-slate-900/50 border border-white/10 rounded-2xl p-4 text-white placeholder:text-slate-600 focus:border-amber-500/50 outline-none transition-all"
+                className="w-full bg-white/5 border-b border-white/30 p-4 text-white placeholder:text-gray-500 outline-none focus:border-amber-500 transition-all text-lg"
                 onChange={(e) => setDish(e.target.value)} 
-                placeholder="Ex: Velvety Risotto..." 
+                placeholder="A rich curry, a decadent cake..." 
               />
             </div>
           </div>
@@ -60,28 +81,29 @@ export default function Home() {
           <button 
             onClick={getRecipe}
             disabled={loading}
-            className="w-full bg-gradient-to-r from-amber-500 to-amber-700 hover:from-amber-400 hover:to-amber-600 text-black font-bold py-4 rounded-2xl transition-all transform active:scale-95 shadow-[0_0_20px_rgba(245,158,11,0.3)] disabled:opacity-50"
+            className="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-5 rounded-xl transition-all shadow-lg hover:shadow-amber-600/20 disabled:opacity-50 tracking-widest"
           >
-            {loading ? (
-              <span className="flex items-center justify-center gap-2">
-                <svg className="animate-spin h-5 w-5 text-black" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                CRAFTING RECIPE...
-              </span>
-            ) : 'GENERATE CULINARY MASTERPIECE'}
+            {loading ? 'PREPARING YOUR MASTERPIECE...' : 'GENERATE RECIPE'}
           </button>
         </div>
 
         {/* Recipe Display */}
         {recipe && (
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 bg-white text-slate-900 rounded-3xl p-10 shadow-2xl prose prose-slate max-w-none">
-            <div className="whitespace-pre-wrap font-serif text-lg leading-relaxed italic">
+          <div className="bg-white rounded-[2rem] p-10 shadow-2xl animate-in fade-in zoom-in duration-500 text-gray-900">
+            <div className="flex justify-between items-center mb-6 border-b pb-4">
+              <span className="text-xs font-bold uppercase tracking-widest text-amber-600">Recipe by Chef.AI</span>
+              <span className="text-xs font-serif italic text-gray-400">Curated for Isum</span>
+            </div>
+            <div className="whitespace-pre-wrap leading-relaxed text-lg font-serif">
               {recipe}
             </div>
           </div>
         )}
+
+        {/* Footer */}
+        <footer className="mt-20 text-center opacity-40">
+          <p className="text-[10px] text-white tracking-[0.2em] font-light">© 2026 LUXE GASTRONOMY BY ISUM</p>
+        </footer>
       </div>
     </main>
   );
